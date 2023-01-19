@@ -1,0 +1,16 @@
+--- 
+- hosts: webservers
+  become: true
+
+  tasks:
+    - name: Add user sid
+      user:
+        name: sid
+    - name: Add sudo group rights for deployment user.
+      lineinfile:
+        dest: /etc/sudoers
+        regexp: "^sid"
+        line: 'sid ALL=(ALL) NOPASSWD :ALL'
+        state: present
+        validate: 'visudo -cf %s'
+
