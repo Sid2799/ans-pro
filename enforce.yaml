@@ -1,0 +1,18 @@
+---
+- hosts: webservers 
+  become: true
+  vars:
+    disable_services:
+      - "chronyd.service"
+
+  tasks:
+    - name: gather service facts
+      ansible.builtin.service_facts:
+
+    - name: disable services
+      ansible.builtin.service:
+        name: "{{item}}"
+        enabled: flase
+        state: stopped
+      when: "item in services"
+      with_items: '{{ disable_services}}'
